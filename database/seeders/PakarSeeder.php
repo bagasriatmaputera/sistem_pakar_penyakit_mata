@@ -66,7 +66,7 @@ class PakarSeeder extends Seeder
             ['kode_gejala' => 'G42', 'nama_gejala' => 'Rabun senja', 'deskripsi_gejala' => '-', 'created_at' => $now, 'updated_at' => $now],
         ];
         
-        DB::table('tb_gejala')->insert($dataGejala);
+        DB::table('gejalas')->insert($dataGejala);
 
         // ==========================================
         // 2. DATA PENYAKIT & PERAWATAN (P01 - P20)
@@ -174,7 +174,7 @@ class PakarSeeder extends Seeder
             ],
         ];
 
-        DB::table('tb_penyakit')->insert($dataPenyakit);
+        DB::table('penyakits')->insert($dataPenyakit);
 
         // ==========================================
         // 3. DATA RULES (FORWARD CHAINING MATCHING)
@@ -285,6 +285,6 @@ class PakarSeeder extends Seeder
             ['penyakit_id' => 20, 'gejala_id' => 42, 'created_at' => $now, 'updated_at' => $now],
         ];
 
-        DB::table('tb_rules')->insert($dataRules);
+        DB::table('rules')->insert($dataRules);
     }
 }

@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('kode_penyakit', 10)->unique();
             $table->string('nama_penyakit', 100);
-            $table->text('deskripsi');
+            $table->text('deskripsi_penyakit');
             $table->text('saran_perawatan');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

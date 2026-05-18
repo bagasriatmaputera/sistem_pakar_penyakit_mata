@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('penyakit_id')->constrained('penyakits')->onDelete('cascade');
             $table->foreignId('gejala_id')->constrained('gejalas')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

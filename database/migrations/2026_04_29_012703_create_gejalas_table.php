@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('gejalas', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_gejala', 10)->unique();
+            $table->string('kode_gejala', 10)->unique()->index();
             $table->string('nama_gejala');
+            $table->text('deskripsi_gejala')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
