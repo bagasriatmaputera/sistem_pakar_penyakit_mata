@@ -15,7 +15,6 @@ class Riwayat extends Model
         'tanggal_diagnosa'
     ];
 
-    // Penting untuk konversi otomatis data JSON ke array PHP
     protected $casts = [
         'gejala_terpilih' => 'array',
         'tanggal_diagnosa' => 'datetime',

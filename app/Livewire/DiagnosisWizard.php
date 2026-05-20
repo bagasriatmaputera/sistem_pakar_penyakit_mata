@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Gejala;
+use App\Services\MethodService;
 
 class DiagnosisWizard extends Component
 {
