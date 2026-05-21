@@ -25,6 +25,11 @@
             @endif
         </div>
 
+        <x-breadcrumbs :paths="[
+            'Artikel' => route('artikel.index'),
+            $artikel->title => '#'
+        ]" />
+
         <div class="p-5">
             <span class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">
                 Kesehatan Mata

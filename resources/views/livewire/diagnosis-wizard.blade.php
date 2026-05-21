@@ -10,6 +10,20 @@
         <p class="text-xs text-blue-100 uppercase tracking-widest">Analisis Gejala (Mata)</p>
     </div>
 
+    @php
+        $stepLabels = [
+            1 => 'Pilih Gejala',
+            2 => 'Detail Pasien',
+            3 => 'Tinjauan Data',
+            4 => 'Hasil Diagnosis'
+        ];
+    @endphp
+
+    <x-breadcrumbs :paths="[
+        'Diagnosis' => route('diagnosis.wizard'),
+        $stepLabels[$currentStep] => '#'
+    ]" />
+
     <div class="p-5 flex-1">
         
         <div class="flex items-center justify-between mb-6 px-4">

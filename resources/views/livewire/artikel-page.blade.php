@@ -24,6 +24,11 @@
             </span>
         </div>
 
+        <x-breadcrumbs :paths="[
+            'Artikel' => route('artikel.index'),
+            'Semua Artikel' => '#'
+        ]" />
+
         <div class="space-y-5">
             @forelse($artikels as $artikel)
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md">
