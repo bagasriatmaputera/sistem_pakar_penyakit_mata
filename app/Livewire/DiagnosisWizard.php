@@ -10,26 +10,30 @@ class DiagnosisWizard extends Component
 {
     public $currentStep = 1;
     public $search = '';
-    public $selectedSymptoms = [];
-    public $nama_pasien = '';
-    public $usia = '';
-    public $jenis_kelamin = '';
-    public $setuju_disclaimer = false;
+    public $form = [
+        'gejala_terpilih' => [],
+        'nama_pasien' => '',
+        'usia' => '',
+        'jenis_kelamin' => '',
+        'setuju_disclaimer' => false
+    ]; 
+    public $hasilRiwayat = null;
+    public $apakahMelebihiBatas = false;
 
     public function toggleSymptom($symptomId)
     {
-        if (in_array($symptomId, $this->selectedSymptoms)) {
-            $this->selectedSymptoms = array_diff($this->selectedSymptoms, [$symptomId]);
+        if (in_array($symptomId, $this->form['gejala_terpilih'])) {
+            $this->form['gejala_terpilih'] = array_diff($this->form['gejala_terpilih'], [$symptomId]);
         } else {
-            $this->selectedSymptoms[] = $symptomId;
+            $this->form['gejala_terpilih'][] = $symptomId;
         }
-        $this->selectedSymptoms = array_values($this->selectedSymptoms);
+        $this->form['gejala_terpilih'] = array_values($this->form['gejala_terpilih']);
     }
 
-    public function nextStep()
+    public function nextStep(MethodService $methodService)
     {
         if ($this->currentStep === 1) {
-            if (count($this->selectedSymptoms) === 0) {
+            if (count($this->form['gejala_terpilih']) === 0) {
                 session()->flash('error', 'Silakan pilih minimal satu gejala terlebih dahulu.');
                 return;
             }
@@ -37,32 +41,42 @@ class DiagnosisWizard extends Component
         } 
         elseif ($this->currentStep === 2) {
             $this->validate([
-                'nama_pasien' => 'required|string|max:100',
-                'usia' => 'required|numeric|min:1|max:120',
-                'jenis_kelamin' => 'required'
+                'form.nama_pasien' => 'required|string|max:100',
+                'form.usia' => 'required|numeric|min:1|max:120',
+                'form.jenis_kelamin' => 'required'
             ], [
-                'nama_pasien.required' => 'Nama wajib diisi.',
-                'usia.required' => 'Usia wajib diisi.',
-                'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.'
+                'form.nama_pasien.required' => 'Nama wajib diisi.',
+                'form.usia.required' => 'Usia wajib diisi.',
+                'form.jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.'
             ]);
 
             $g06 = Gejala::where('kode_gejala', 'G06')->first();
-            if ($g06 && $this->usia > 40) {
-                if (!in_array($g06->id, $this->selectedSymptoms)) {
-                    $this->selectedSymptoms[] = $g06->id;
+            if ($g06 && $this->form['usia'] > 40) {
+                if (!in_array($g06->id, $this->form['gejala_terpilih'])) {
+                    $this->form['gejala_terpilih'][] = $g06->id;
                 }
             }
 
             $this->currentStep = 3;
         }
         elseif ($this->currentStep === 3) {
-            if (!$this->setuju_disclaimer) {
-                session()->flash('error', 'Anda harus menyetujui pernyataan disclaimer untuk melanjutkan.');
-                return;
-            }
-            
-            $this->currentStep = 4;
-        }
+    if (!$this->form['setuju_disclaimer']) {
+        session()->flash('error', 'Anda harus menyetujui pernyataan disclaimer untuk melanjutkan.');
+        return;
+    }
+
+    try {
+        $methodService->determineDisease($this->form);
+        
+        $this->hasilRiwayat = $methodService->getResults($this->form['nama_pasien']);
+
+    } catch (\Throwable $th) {
+        session()->flash('error', $th->getMessage());
+        return;
+    }
+    
+    $this->currentStep = 4;
+}
     }
 
     public function previousStep()
@@ -79,12 +93,27 @@ class DiagnosisWizard extends Component
             })
             ->get();
 
-        $selectedGejalaItems = Gejala::whereIn('id', $this->selectedSymptoms)
+        $selectedGejalaItems = Gejala::whereIn('id', $this->form['gejala_terpilih'])
             ->get();
 
         return view('livewire.diagnosis-wizard', [
             'gejalas' => $gejalas,
-            'selectedGejalaItems' => $selectedGejalaItems
+            'selectedGejalaItems' => $selectedGejalaItems,
+            'hasilRiwayat' => $this->hasilRiwayat ?? null
         ])->layout('layouts.app');
+    }
+
+    public function resetKonsultasi()
+    {
+        $this->currentStep = 1;
+        $this->search = '';
+        $this->hasilRiwayat = null; 
+        $this->form = [
+            'gejala_terpilih' => [],
+            'nama_pasien' => '',
+            'usia' => '',
+            'jenis_kelamin' => '',
+            'setuju_disclaimer' => false
+        ];
     }
 }
