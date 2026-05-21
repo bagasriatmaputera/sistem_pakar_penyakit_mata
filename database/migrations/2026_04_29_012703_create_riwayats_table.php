@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('riwayats', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pasien')->nullable();
-            $table->json('gejala_terpilih');
+            $table->string('nama_pasien')->required();
+            $table->integer('usia')->required();
+            $table->string('jenis_kelamin')->required();
+            $table->json('gejala_terpilih')->required();
             $table->foreignId('penyakit_id')->nullable()->constrained('penyakits')->onDelete('set null');
             $table->decimal('tingkat_akurasi', 5, 2)->nullable();
-            $table->timestamp('tanggal_diagnosa');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

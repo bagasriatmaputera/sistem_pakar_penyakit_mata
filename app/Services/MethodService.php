@@ -30,11 +30,16 @@ class MethodService
 
             Riwayat::create([
                 'nama_pasien' => $data['nama_pasien'],
+                'usia' => $data['usia'],
+                'jenis_kelamin' => $data['jenis_kelamin'],
                 'gejala_terpilih' => $inputGejala,
                 'penyakit_id' => $penyakit->id,
-                'tingkat_akurasi' => round($akurasi, 2),
-                'tanggal_diagnosa' => Carbon::now()
+                'tingkat_akurasi' => round($akurasi, 2)
             ]);
         }
+    }
+
+    public function getResults(string $namaPasien){
+        return Riwayat::with('penyakit')->where('nama_pasien', $namaPasien)->where('tingkat_akurasi', '>=', 40)->latest()->get();
     }
 }
