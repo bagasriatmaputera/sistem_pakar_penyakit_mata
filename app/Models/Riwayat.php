@@ -12,12 +12,13 @@ class Riwayat extends Model
         'nama_pasien', 
         'gejala_terpilih', 
         'penyakit_id', 
-        'tanggal_diagnosa'
+        'usia',
+        'jenis_kelamin',
+        'tingkat_akurasi'
     ];
 
     protected $casts = [
         'gejala_terpilih' => 'array',
-        'tanggal_diagnosa' => 'datetime',
     ];
 
     public function penyakit()
