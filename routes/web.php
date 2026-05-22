@@ -13,6 +13,8 @@ use App\Livewire\PenyakitCreateOrUpdate;
 use App\Livewire\RuleIndex;
 use App\Livewire\RuleCreateOrUpdate;
 use App\Livewire\AdminDashboard;
+use App\Livewire\ArtikelIndex;
+use App\Livewire\ArtikelCreateOrUpdate;
 
 Route::get('/', HomePage::class)->name('home');
 
@@ -32,5 +34,9 @@ Route::get('/admin/penyakit/edit/{id}', PenyakitCreateOrUpdate::class)->name('ad
 Route::get('/admin/rule', RuleIndex::class)->name('admin.rule.index');
 Route::get('/admin/rule/create', RuleCreateOrUpdate::class)->name('admin.rule.create');
 Route::get('/admin/rule/edit/{id}', RuleCreateOrUpdate::class)->name('admin.rule.edit');
+
+Route::get('/admin/artikel', ArtikelIndex::class)->name('admin.artikel.index');
+Route::get('/admin/artikel/create', ArtikelCreateOrUpdate::class)->name('admin.artikel.create');
+Route::get('/admin/artikel/edit/{id}', ArtikelCreateOrUpdate::class)->name('admin.artikel.edit');
 
 Route::get('/admin', AdminDashboard::class)->name('admin.dashboard');
