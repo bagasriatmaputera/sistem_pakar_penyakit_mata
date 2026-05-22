@@ -113,14 +113,28 @@
                     </div>
                 </a>
 
+                <a href="{{ route('admin.artikel.index') }}" class="group block bg-white p-4 rounded-2xl border border-gray-150 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2.5 h-2.5 bg-sky-400 rounded-full group-hover:scale-125 transition-transform"></div>
+                            <span class="text-xs font-bold text-gray-800">Kelola Artikel Edukasi Kesehatan</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-300 group-hover:text-sky-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                </a>
+
             </div>
 
         </div>
     </div>
 
-    <div class="p-4 bg-white border-t border-gray-100">
-        <a href="{{ route('home') }}" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3 rounded-xl shadow text-center block text-xs tracking-wide transition">
-            ← Keluar Panel & Buka Landing Page Pasien
+    <div class="p-4 bg-white border-t border-gray-100 space-y-2">
+        <button type="button" wire:click="logout" wire:confirm="Apakah Anda ingin keluar dari akun administrator?"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl shadow text-center text-xs tracking-wide transition block">
+            🔒 Log Out / Keluar Panel Admin
+        </button>
+        <a href="{{ route('home') }}" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-750 font-semibold py-2 rounded-xl text-center block text-[11px] transition">
+            Lihat Tampilan Aplikasi Pasien
         </a>
     </div>
 

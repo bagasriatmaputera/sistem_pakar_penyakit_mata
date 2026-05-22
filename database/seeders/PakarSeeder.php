@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class PakarSeeder extends Seeder
 {
@@ -13,10 +15,15 @@ class PakarSeeder extends Seeder
      */
     public function run(): void
     {
+        // UserAdminCreate
+        if (!User::where('email', 'admin@gmail.com')->exists()) {
+        User::create([
+            'name' => 'parhan',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'),
+        ]);
+    }
         $now = Carbon::now();
-
-        // Harap pastikan nama tabel (tb_gejala, tb_penyakit, tb_rules) di bawah ini
-        // sudah sesuai dengan nama tabel pada file Migration Anda.
 
         // ==========================================
         // 1. DATA GEJALA (G01 - G42)

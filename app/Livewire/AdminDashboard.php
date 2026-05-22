@@ -10,6 +10,15 @@ use Livewire\Component;
 
 class AdminDashboard extends Component
 {
+    public function logout()
+    {
+        \Illuminate\Support\Facades\Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect()->route('home');
+    }
+
     public function render()
     {
         // Mengambil counter statistik data langsung dari database
