@@ -12,6 +12,10 @@ services:
       - app
 
   app:
+    environment:
+      APP_URL: https://eyecheck.bagasr.my.id
+      ASSET_URL: https://eyecheck.bagasr.my.id
+      APP_ENV: production
     build:
       context: .
       target: app
