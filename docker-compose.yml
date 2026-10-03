@@ -1,0 +1,64 @@
+services:
+  web:
+    build:
+      context: .
+      target: web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:80"
+    volumes:
+      - app-storage:/var/www/html/storage:ro
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: .
+      target: app
+    image: laravel-app:latest
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - app-storage:/var/www/html/storage
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # Opsional: aktifkan kalau pakai queue / scheduler
+  # queue:
+  #   image: laravel-app:latest
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+  #   volumes:
+  #     - app-storage:/var/www/html/storage
+  #   depends_on: [app]
+  #
+  # scheduler:
+  #   image: laravel-app:latest
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   command: php artisan schedule:work
+  #   volumes:
+  #     - app-storage:/var/www/html/storage
+  #   depends_on: [app]
+
+volumes:
+  dbdata:
+  app-storage:
